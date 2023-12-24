@@ -78,4 +78,8 @@ docker-compose up
 - Step 16: I have created the [.github](.github) folder
 - Step 17: And I have created another folder under .github [workflows](.github/workflows)
 - Step 18: I have created a file under workflows [checks.yml](.github/workflows/checks.yml)
-
+- Step 19: I have created loged in to [my dockerhub account](https://hub.docker.com) and navigated to **My account** then **security**
+  ![Dockerhub security account](readme_images/dockerhub.png "dockerhub my account security")
+- Step 20: I have created an access token for the github action.
+- Step 21: I have created a new secret in my repo
+  ![Github Secret](readme_images/github_secret.png "github secrete")
