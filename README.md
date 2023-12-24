@@ -83,4 +83,47 @@ docker-compose up
 - Step 20: I have created an access token for the github action.
 - Step 21: I have created a new secret in my repo
   ![Github Secret](readme_images/github_secret.png "github secrete")
-- Step 22: I have staged and commit and push the project on my repo.
+- Step 22: I have staged and commit and push the project on my repo and created a new tag
+
+```
+git add .
+git commit -m "Version v0.0"
+git tag -a v0.0 -m "Release version v0.0
+git push origin main
+git push origin v0.0
+```
+
+- Step 23: I have added the db service in the [docker-compose.yml](docker-compose.yml)
+
+```
+db:
+    image: postgres:16-alpine
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=shopAi
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
+volumes:
+  dev-db-data:
+
+```
+
+and I have added the name and user and pass of the db in the app service to wait for the db service to be created and started and then start the app
+
+```
+environment:
+      - DB_HOST=db
+      - DB_NAME=shopAi
+      - DB_USER=root
+      - DB_PASS=root
+    depends_on:
+      - db
+```
+
+Then I have tested in by running
+
+```
+docker-compose up
+```
