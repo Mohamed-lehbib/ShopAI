@@ -74,3 +74,8 @@ docker-compose run --rm app sh -c "django-admin startproject app ."
 ```
 docker-compose up
 ```
+
+- Step 16: I have created the [.github](.github) folder
+- Step 17: And I have created another folder under .github [workflows](.github/workflows)
+- Step 18: I have created a file under workflows [checks.yml](.github/workflows/checks.yml)
+
