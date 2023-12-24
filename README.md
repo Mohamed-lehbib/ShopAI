@@ -201,7 +201,12 @@ DATABASES = {
 ```
 docker-compose run --rm app sh -c "python manage.py startapp core"
 ```
-- Step 28: 
+
+- Step 28: Then i have delete the `test.py` file and `views.py` and created the [test](app/core/test) and I have created this file to initialize the folder [`__init__.py`](app/core/tests/__init__.py)
+- Step 29: I have added the [core](app/core) app in the [settings.py](app/app/settings.py)
+- Step 30: I have created a folder [management](app/core/management) and i have created a file under it [`__init__.py`](app/core/management/__init__.py) and I have created a folder under the management [commands](app/core/management/commands/) and a [`__init.py`](app/core/management/commands/__init__.py) file under the commands
+- Step 31: I have created another file under the [commands](app/core/management/commands/) called [wait_for_db.py](app/core/management/commands/wait_for_db.py)
+- Step 32: I have created a file under the [test](app/core/tests) called [test_commands.py](app/core/tests/test_commands.py)
 
 ## Psycopg2
 
