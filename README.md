@@ -180,6 +180,29 @@ docker-compose down
 docker-compose build
 ```
 
+- Step 26: I have connect my django project to the postgresql db using environment variables
+
+```
+import os
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgres',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS')
+
+    }
+}
+```
+
+- Step 27: I have created called [core](app/core)
+
+```
+docker-compose run --rm app sh -c "python manage.py startapp core"
+```
+- Step 28: 
+
 ## Psycopg2
 
 ### Required packages
