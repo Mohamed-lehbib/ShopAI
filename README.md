@@ -7,6 +7,31 @@ It's an e-commerce app that has some AI functionalities
 - Step 1: I have created a repo on github and created a readme file and [.gitignore](.gitignore) file for python to ignore all the unnecessary files that we don't need them to be pushed to the repo.
 - Step 2: I have created a [requirements.txt](requirements.txt) file that contains all the requirements that this project need to run.
 - Step 3: I have created the [Dockerfile](Dockerfile) that contains the base image and the command that are going to be run and the user.
+
+```
+FROM python:3.12-alpine3.19
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./app /app
+WORKDIR /app
+EXPOSE 8000
+
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    /py/bin/pip install -r /tmp/requirements.txt && \
+    rm -rf /tmp && \
+    adduser \
+    --disabled-password \
+    --no-create-home \
+    django-user
+
+ENV PATH="/py/bin:$PATH"
+
+USER django-user
+```
+
 - Step 4: I have created [.dockerignore](.dockerignore) to ignore all the unnecessary files of directory to make the docker image as light as possible.
 - Step 5: I have created the [app](app/) folder that will contains all the project.
 - Step 5: Then to build my image I have run this command
@@ -127,3 +152,49 @@ Then I have tested in by running
 ```
 docker-compose up
 ```
+
+- Step 24: I have installed the postgres adaptor inside my Docker env
+
+```
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+    build-base postgresql-dev musl-dev && \
+    /py/bin/pip install -r /tmp/requirements.txt && \
+    if [ $DEV = "true" ]; \
+    then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+    fi && \
+    rm -rf /tmp && \
+    apk del .tmp-build-deps && \
+    adduser \
+    --disabled-password \
+    --no-create-home \
+    django-user
+```
+
+- Step 25: I have added the psycopg2 in [requirements.txt](requirements.txt)
+
+```
+docker-compose down
+docker-compose build
+```
+
+## Psycopg2
+
+### Required packages
+
+- C compiler
+- python3-dev
+- libpq-dev
+
+### Equivalent of the required packages for Alpine
+
+- postgresql-client
+- build-base
+- postgresql-dev
+- musl-dev
+
+### Docker cleanup
+
+`build-base`, `postgresql-dev` and `musl-dev` are only need to install the psycopg2 so after install the package we will delete them to keep our Docker file very minimal.
