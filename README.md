@@ -83,3 +83,4 @@ docker-compose up
 - Step 20: I have created an access token for the github action.
 - Step 21: I have created a new secret in my repo
   ![Github Secret](readme_images/github_secret.png "github secrete")
+- Step 22: I have staged and commit and push the project on my repo.
