@@ -229,6 +229,8 @@ docker-compose down
 docker-compose up
 ```
 
+Step 35: create a test user for the model.
+
 ## Psycopg2
 
 ### Required packages
