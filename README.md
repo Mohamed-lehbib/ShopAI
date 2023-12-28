@@ -231,6 +231,48 @@ docker-compose up
 
 Step 35: create a test user for the model in the [test_models.py](app/core/tests/test_models.py)
 
+```
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+
+
+class ModelTests(TestCase):
+    """Test models."""
+
+    def test_create_user_with_email_successful(self):
+        """Test creating a user with an email is successful."""
+        email = 'test@example.com'
+        password = 'testpass123'
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password,
+        )
+
+        self.assertEqual(user.email, email)
+        self.assertTrue(user.check_password(password))
+```
+
+- Step 36: I have create the user model in the [models.py](app/core/models.py)
+
+```
+from django.db import models
+from django.contrib.auth.models import (
+    AbstractBaseUser, # <-- This contains functionality for auth system but not the fields
+    BaseUserManager,
+    PermissionsMixin, # <-- This contains functionality for the permissions & fields
+)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    """User in the system."""
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+```
+
 ## Psycopg2
 
 ### Required packages
