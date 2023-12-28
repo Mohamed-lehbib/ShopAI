@@ -229,7 +229,7 @@ docker-compose down
 docker-compose up
 ```
 
-Step 35: create a test user for the model.
+Step 35: create a test user for the model in the [test_models.py](app/core/tests/test_models.py)
 
 ## Psycopg2
 
