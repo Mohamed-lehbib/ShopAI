@@ -273,6 +273,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 ```
 
+- Step 37: I have added the UserManager in the [models.py](app/core/models.py)
+
+```
+class UserManager(BaseUserManager):
+    """Manager for users."""
+
+    def create_user(self, email, password=None, **extra_fields):
+        """Create, save and return a new user."""
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+```
+
 ## Psycopg2
 
 ### Required packages
