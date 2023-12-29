@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: CleanUp
-        run: docker-compose down && docker volume rm shopai_dev-db-data
+        run: docker-compose down
       - name: Build
         run: docker-compose build
       - name: Test
