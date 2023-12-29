@@ -374,6 +374,119 @@ So now we have cleared all the data so we can run the migrate again
 docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"
 ```
 
+and i got another error saying:
+
+```
+[+] Creating 3/3
+ ✔ Network shopai_default       Created                                                                                 0.0s
+ ✔ Volume "shopai_dev-db-data"  Created                                                                                 0.0s
+ ✔ Container shopai-db-1        Created                                                                                 0.0s
+[+] Running 1/1
+ ✔ Container shopai-db-1  Started                                                                                       0.2s
+waiting for database...
+Database available!
+Traceback (most recent call last):
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 289, in ensure_connection
+    self.connect()
+  File "/py/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 270, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 275, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "db" (192.168.16.2), port 5432 failed: Connection refused
+        Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/manage.py", line 22, in <module>
+    main()
+  File "/app/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/py/lib/python3.12/site-packages/django/core/management/base.py", line 412, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/py/lib/python3.12/site-packages/django/core/management/base.py", line 458, in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/core/management/base.py", line 106, in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 117, in handle
+    executor = MigrationExecutor(connection, self.migration_progress_callback)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/migrations/executor.py", line 18, in __init__
+    self.loader = MigrationLoader(self.connection)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/migrations/loader.py", line 58, in __init__
+    self.build_graph()
+  File "/py/lib/python3.12/site-packages/django/db/migrations/loader.py", line 235, in build_graph
+    self.applied_migrations = recorder.applied_migrations()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 81, in applied_migrations
+    if self.has_table():
+       ^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 57, in has_table
+    with self.connection.cursor() as cursor:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 330, in cursor
+    return self._cursor()
+           ^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 306, in _cursor
+    self.ensure_connection()
+  File "/py/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 288, in ensure_connection
+    with self.wrap_database_errors:
+  File "/py/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 289, in ensure_connection
+    self.connect()
+  File "/py/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/base/base.py", line 270, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 275, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "db" (192.168.16.2), port 5432 failed: Connection refused
+        Is the server running on that host and accepting TCP/IP connections?
+```
+
+and
+
+```
+docker-compose build
+```
+
+to build the service and **rerun it and it will work**
+
 ## Psycopg2
 
 ### Required packages
