@@ -252,7 +252,13 @@ class ModelTests(TestCase):
         self.assertTrue(user.check_password(password))
 ```
 
-- Step 36: I have create the user model in the [models.py](app/core/models.py)
+- Step 36: I have run the test to see if everything is working as expected
+
+```
+docker-compose run --rm app sh -c "python manage.py makemigrations"
+```
+
+- Step 37: I have create the user model in the [models.py](app/core/models.py)
 
 ```
 from django.db import models
@@ -273,7 +279,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 ```
 
-- Step 37: I have added the UserManager in the [models.py](app/core/models.py)
+- Step 38: I have added the UserManager in the [models.py](app/core/models.py)
 
 ```
 class UserManager(BaseUserManager):
@@ -286,6 +292,18 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+```
+
+- Step 39: I have added this ligne in the [settings.py](app/app/settings.py) to specify that we are going to user model in the [core/models.py](core/models.py)
+
+```
+AUTH_USER_MODEL = 'core.User'
+```
+
+- Step 40: I have create the migrations
+
+```
+docker-compose run --rm app sh -c "python manage.py makemigrations"
 ```
 
 ## Psycopg2
