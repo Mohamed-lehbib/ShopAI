@@ -306,6 +306,74 @@ AUTH_USER_MODEL = 'core.User'
 docker-compose run --rm app sh -c "python manage.py makemigrations"
 ```
 
+- Step 41: I have migrated it to the database
+
+```
+docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"
+```
+
+and I got this error when running the command
+
+```
+[+] Creating 1/0
+ ✔ Container shopai-db-1  Running                                                                                       0.0s
+waiting for database...
+Database available!
+Traceback (most recent call last):
+  File "/app/manage.py", line 22, in <module>
+    main()
+  File "/app/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/py/lib/python3.12/site-packages/django/core/management/base.py", line 412, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/py/lib/python3.12/site-packages/django/core/management/base.py", line 458, in execute
+    output = self.handle(*args, **options)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/core/management/base.py", line 106, in wrapper
+    res = handle_func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/py/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 120, in handle
+    executor.loader.check_consistent_history(connection)
+  File "/py/lib/python3.12/site-packages/django/db/migrations/loader.py", line 327, in check_consistent_history
+    raise InconsistentMigrationHistory(
+django.db.migrations.exceptions.InconsistentMigrationHistory: Migration admin.0001_initial is applied before its dependency core.0001_initial on database 'default'.
+```
+
+cuz we have unconsistent migrations history so I need to clear the data for the database
+
+```
+docker volume ls
+```
+
+to liste all the volumes on my system and then i copy the name of my volume to delete it
+
+```
+docker volume rm shopai_dev-db-data
+```
+
+And we got an error sating `Error response from daemon: No such container: shopai_dev-db-data`
+it's because the volume is in use i have to stop the container
+
+```
+docker-compose down
+```
+
+Then i run the delete volume again
+
+```
+docker volume rm shopai_dev-db-data
+```
+
+So now we have cleared all the data so we can run the migrate again
+
+```
+docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"
+```
+
 ## Psycopg2
 
 ### Required packages
