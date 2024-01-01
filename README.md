@@ -486,7 +486,6 @@ docker-compose build
 ```
 
 to build the service and **rerun it and it will work**
-hello
 
 ## Psycopg2
 
