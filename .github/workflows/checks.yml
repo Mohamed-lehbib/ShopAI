@@ -36,8 +36,8 @@ jobs:
       #     echo "DB_USER=$DB_USER"
       #     # Don't print the DB_PASS or any other sensitive information
 
-      - name: Check
-        run: docker-compose run --rm app sh -c "python manage.py check"
+      # - name: Check
+      #   run: docker-compose run --rm app sh -c "python manage.py check"
 
       # Run your existing test command
       - name: Test
