@@ -1,4 +1,3 @@
----
 name: Checks
 
 on: [push]
@@ -13,9 +12,38 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Add a step to print the Docker version
+      - name: Print Docker version
+        run: docker --version
+
+      # Add a step to print the Docker Compose version
+      - name: Print Docker Compose version
+        run: docker-compose --version
+
+      # Add a step to build the Docker containers (optional)
+      - name: Build Containers
+        run: docker-compose build
+
+      # Add a step to print environment variables (be careful with secrets)
+      - name: Print Environment Variables
+        run: |
+          echo "DB_HOST=$DB_HOST"
+          echo "DB_NAME=$DB_NAME"
+          echo "DB_USER=$DB_USER"
+          # Don't print the DB_PASS or any other sensitive information
+
+      # Run your existing test command
       - name: Test
         run: docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
+
+      # Add a step to print logs from the db container
+      - name: Print Database Logs
+        run: docker-compose logs db
+
+      # Run your existing lint command
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"
