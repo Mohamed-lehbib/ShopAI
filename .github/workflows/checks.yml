@@ -16,25 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Add a step to print the Docker version
-      # - name: Print Docker version
-      #   run: docker --version
-
-      # Add a step to print the Docker Compose version
-      # - name: Print Docker Compose version
-      #   run: docker-compose --version
-
       # Add a step to build the Docker containers (optional)
       - name: Build Containers
         run: docker-compose build
-
-      # Add a step to print environment variables (be careful with secrets)
-      # - name: Print Environment Variables
-      #   run: |
-      #     echo "DB_HOST=$DB_HOST"
-      #     echo "DB_NAME=$DB_NAME"
-      #     echo "DB_USER=$DB_USER"
-      #     # Don't print the DB_PASS or any other sensitive information
 
       - name: Check
         run: docker-compose run --rm app sh -c "python manage.py check"
