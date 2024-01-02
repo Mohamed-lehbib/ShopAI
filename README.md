@@ -486,7 +486,26 @@ docker-compose build
 ```
 
 to build the service and **rerun it and it will work**
-I have had alot of bugs in the pipeline
+
+- Step 42: I had a problem in the github action pipeline it was failing on the test job and it was do to that the django couldn't get the db
+  and i have debuged it by adding these jobs:
+
+```
+- name: Build Containers
+  run: docker-compose build
+
+# Check
+- name: Check
+  run: docker-compose run --rm app sh -c "python manage.py check"
+
+# Run your existing test command
+- name: Test
+  run: docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
+
+# Add a step to print logs from the db container
+- name: Print Database Logs
+  run: docker-compose logs db
+```
 
 ## Psycopg2
 
