@@ -529,6 +529,24 @@ Then run the tests
 docker-compose run --rm app sh -c "python manage.py test"
 ```
 
+- Step 44: I have added the normalize email adresse in [models.py](app/core/models.py)
+- Step 45: I have added a test to test that if the email isn't provided it raises a value error in [test_models.py](app/core/tests/test_models.py)
+
+```
+def test_new_user_without_email_raises_error(self):
+  """Test that creating a user without an email raises ValueError."""
+  with self.assertRaises(ValueError):
+    get_user_model().objects.create_user('', 'test123')
+```
+
+and i have run the test
+
+```
+docker-compose run --rm app sh -c "python manage.py test"
+```
+
+and i have implemented the feature in [models.py](app/core/models.py)
+
 ## Psycopg2
 
 ### Required packages
