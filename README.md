@@ -580,6 +580,8 @@ def create_superuser(self, email, password):
   return user
 ```
 
+and run the test again
+
 ## Psycopg2
 
 ### Required packages
