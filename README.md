@@ -507,6 +507,28 @@ to build the service and **rerun it and it will work**
   run: docker-compose logs db
 ```
 
+- Step 43: I have added the test to normilize the emails of the user [test_models.py](app/core/tests/test_models.py)
+
+```
+def test_new_user_email_normalized(self):
+  """Test email is normalized for new users."""
+  sample_emails = [
+    ['test1@EXAMPLE.com', 'test1@example.com'],
+    ['Test2@Example.com', 'Test2@example.com'],
+    ['TEST3@EXAMPLE.COM', 'TEST3@example.com'],
+    ['test4@example.COM', 'test4@example.com'],
+  ]
+  for email, expected in sample_emails:
+    user = get_user_model().objects.create_user(email, 'sample123')
+    self.assertEqual(user.email, expected)
+```
+
+Then run the tests
+
+```
+docker-compose run --rm app sh -c "python manage.py test"
+```
+
 ## Psycopg2
 
 ### Required packages
