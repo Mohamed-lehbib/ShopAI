@@ -547,6 +547,39 @@ docker-compose run --rm app sh -c "python manage.py test"
 
 and i have implemented the feature in [models.py](app/core/models.py)
 
+- Step 46: I have added to [test_models.py](app/core/tests/test_models.py) the test create superuser
+
+```
+def test_create_superuser(self):
+  """Test creating a superuser."""
+  user = get_user_model().objects.create_superuser(
+    'test@example.com',
+    'test123',
+  )
+
+  self.assertTrue(user.is_superuser)
+  self.assertTrue(user.is_staff)
+```
+
+and then I run the test
+
+```
+docker-compose run --rm app sh -c "python manage.py test"
+```
+
+- Step 47: I have added to [models.py](app/core/models.py) the create_superuser method
+
+```
+def create_superuser(self, email, password):
+  """Create and save a superuser with the given email and password."""
+  user = self.create_user(email, password)
+  user.is_staff = True
+  user.is_superuser = True
+  user.save(using=self._db)
+
+  return user
+```
+
 ## Psycopg2
 
 ### Required packages
