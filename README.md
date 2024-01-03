@@ -587,6 +587,10 @@ and run the test again
 ```
 docker-compose up
 ```
+to test that everything is fine i have created a superuser
+```
+docker-compose run --rm app sh -c "python manage.py createsuperuser"
+```
 
 ## Psycopg2
 
