@@ -594,7 +594,7 @@ to test that everything is fine i have created a superuser
 docker-compose run --rm app sh -c "python manage.py createsuperuser"
 ```
 
-- Step 49: I have created a [test_admin.py](app/core/tests/test_admin.py) to test the admin
+- Step 49: I have created a [test_admin.py](app/core/tests/test_admin.py) to test the admin and i run the tests
 
 Then i have navigated to [admin](http://127.0.0.1:8000/admin) and logged in using the admin info
 
