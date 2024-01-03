@@ -582,6 +582,12 @@ def create_superuser(self, email, password):
 
 and run the test again
 
+- Step 48: After implementing it i will go ahead and test
+
+```
+docker-compose up
+```
+
 ## Psycopg2
 
 ### Required packages
