@@ -594,7 +594,7 @@ to test that everything is fine i have created a superuser
 docker-compose run --rm app sh -c "python manage.py createsuperuser"
 ```
 
-Then i have navigated to [admin](127.0.0.1:8000/admin) and logged in using the admin info
+Then i have navigated to [admin](http://127.0.0.1:8000/admin) and logged in using the admin info
 
 ## Psycopg2
 
