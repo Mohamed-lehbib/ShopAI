@@ -587,10 +587,14 @@ and run the test again
 ```
 docker-compose up
 ```
+
 to test that everything is fine i have created a superuser
+
 ```
 docker-compose run --rm app sh -c "python manage.py createsuperuser"
 ```
+
+Then i have navigated to [admin](127.0.0.1:8000/admin)
 
 ## Psycopg2
 
