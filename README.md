@@ -599,6 +599,12 @@ docker-compose run --rm app sh -c "python manage.py createsuperuser"
 
 Then i have navigated to [admin](http://127.0.0.1:8000/admin) and logged in using the admin info
 
+- Step 51: I have added the `drf_spectacular` to the [requirements.txt](requirements.txt) and builded the container
+
+```
+docker-compose build
+```
+
 ## Psycopg2
 
 ### Required packages
