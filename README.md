@@ -599,11 +599,23 @@ docker-compose run --rm app sh -c "python manage.py createsuperuser"
 
 Then i have navigated to [admin](http://127.0.0.1:8000/admin) and logged in using the admin info
 
+### Unabling the documentation
+
 - Step 51: I have added the `drf_spectacular` to the [requirements.txt](requirements.txt) and builded the container
 
 ```
 docker-compose build
 ```
+
+- Step 52: I have added `rest_framework`and `drf_spectacular` to `INSTALLED_APPS` in [settings.py](app/app/settings.py) and i have added at the buttom of the file
+
+```
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+```
+
+to unable the use of the drf_spectacular schema for documentation
 
 ## Psycopg2
 
