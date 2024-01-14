@@ -617,6 +617,12 @@ REST_FRAMEWORK = {
 
 to unable the use of the drf_spectacular schema for documentation
 
+- Step 53: I have created a user app
+
+```
+docker-compose run --rm app sh -c "python manage.py startapp user"
+```
+
 ## Psycopg2
 
 ### Required packages
