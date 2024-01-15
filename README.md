@@ -623,6 +623,8 @@ to unable the use of the drf_spectacular schema for documentation
 docker-compose run --rm app sh -c "python manage.py startapp user"
 ```
 
+- Step 54: I have created the authentication system using Tokens in the [user](app/user/) app
+
 ## Psycopg2
 
 ### Required packages
