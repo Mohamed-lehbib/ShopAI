@@ -4,7 +4,15 @@ Tests for models.
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from core.models import Category
+from core.models import (
+    User,
+    Category,
+    Product,
+    Order,
+    OrderItem,
+    Cart,
+    CartItem
+)
 
 
 class ModelTests(TestCase):
@@ -53,5 +61,80 @@ class ModelTests(TestCase):
         """Test creating a category with a name is successful."""
         name = 'Electronics'
         category = Category.objects.create(name=name)
-
         self.assertEqual(category.name, name)
+
+    # Product model tests
+    def test_create_product_with_details_successful(self):
+        """Test creating a product with details is successful."""
+        category = Category.objects.create(name='Electronics')
+        name = 'Laptop'
+        description = 'High-performance laptop'
+        price = 999.99
+        stock = 10
+
+        product = Product.objects.create(
+            category=category,
+            name=name,
+            description=description,
+            price=price,
+            stock=stock
+        )
+
+        self.assertEqual(product.name, name)
+        self.assertEqual(product.category, category)
+        self.assertEqual(product.description, description)
+        self.assertEqual(product.price, price)
+        self.assertEqual(product.stock, stock)
+
+    # Order model tests
+    def test_create_order_with_user_and_products_successful(self):
+        """Test creating an order with a user and products is successful."""
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+        category = Category.objects.create(name='Electronics')
+        product = Product.objects.create(
+            category=category,
+            name='Laptop',
+            description='High-performance laptop',
+            price=999.99,
+            stock=10
+        )
+        order = Order.objects.create(user=user)
+        OrderItem.objects.create(order=order, product=product, quantity=1)
+
+        self.assertEqual(order.user, user)
+        self.assertIn(product, order.products.all())
+
+    # Cart model tests
+    def test_create_cart_for_user_successful(self):
+        """Test creating a cart for a user is successful."""
+        user = get_user_model().objects.create_user(
+            email='user@example.com',
+            password='testpass123'
+        )
+        cart = Cart.objects.create(user=user)
+        self.assertEqual(cart.user, user)
+
+    def test_create_cart_item_successful(self):
+        """Test creating a cart item is successful."""
+        user = get_user_model().objects.create_user(
+            email='user@example.com',
+            password='testpass123'
+        )
+        category = Category.objects.create(name='Electronics')
+        product = Product.objects.create(
+            category=category,
+            name='Laptop',
+            description='High-performance laptop',
+            price=999.99,
+            stock=10
+        )
+        cart = Cart.objects.create(user=user)
+        cart_item = CartItem.objects.create(cart=cart, product=product, quantity=2)
+
+        self.assertEqual(cart_item.cart, cart)
+        self.assertEqual(cart_item.product, product)
+        self.assertEqual(cart_item.quantity, 2)
+        self.assertIn(cart_item, cart.items.all())
