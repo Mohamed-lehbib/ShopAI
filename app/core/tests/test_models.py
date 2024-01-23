@@ -5,7 +5,6 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from core.models import (
-    User,
     Category,
     Product,
     Order,
@@ -132,7 +131,8 @@ class ModelTests(TestCase):
             stock=10
         )
         cart = Cart.objects.create(user=user)
-        cart_item = CartItem.objects.create(cart=cart, product=product, quantity=2)
+        cart_item = CartItem.objects.create(cart=cart,
+                                            product=product, quantity=2)
 
         self.assertEqual(cart_item.cart, cart)
         self.assertEqual(cart_item.product, product)
