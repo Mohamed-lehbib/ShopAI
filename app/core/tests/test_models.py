@@ -4,6 +4,8 @@ Tests for models.
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core.models import Category
+
 
 class ModelTests(TestCase):
     """Test models."""
@@ -46,3 +48,10 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_create_category_with_name_successful(self):
+        """Test creating a category with a name is successful."""
+        name = 'Electronics'
+        category = Category.objects.create(name=name)
+
+        self.assertEqual(category.name, name)
