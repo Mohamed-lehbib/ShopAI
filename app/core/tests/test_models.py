@@ -65,6 +65,10 @@ class ModelTests(TestCase):
     # Product model tests
     def test_create_product_with_details_successful(self):
         """Test creating a product with details is successful."""
+        user = get_user_model().objects.create_user(
+            email='productowner@example.com',
+            password='testpass123'
+        )
         category = Category.objects.create(name='Electronics')
         name = 'Laptop'
         description = 'High-performance laptop'
@@ -72,6 +76,7 @@ class ModelTests(TestCase):
         stock = 10
 
         product = Product.objects.create(
+            user=user,
             category=category,
             name=name,
             description=description,
@@ -79,8 +84,9 @@ class ModelTests(TestCase):
             stock=stock
         )
 
-        self.assertEqual(product.name, name)
+        self.assertEqual(product.user, user)
         self.assertEqual(product.category, category)
+        self.assertEqual(product.name, name)
         self.assertEqual(product.description, description)
         self.assertEqual(product.price, price)
         self.assertEqual(product.stock, stock)
@@ -94,6 +100,7 @@ class ModelTests(TestCase):
         )
         category = Category.objects.create(name='Electronics')
         product = Product.objects.create(
+            user=user,
             category=category,
             name='Laptop',
             description='High-performance laptop',
@@ -124,6 +131,7 @@ class ModelTests(TestCase):
         )
         category = Category.objects.create(name='Electronics')
         product = Product.objects.create(
+            user=user,
             category=category,
             name='Laptop',
             description='High-performance laptop',
