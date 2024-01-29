@@ -6,11 +6,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from core.models import (
     Category,
-    Product
+    Product,
+    Order,
+    OrderItem
 )
 from .serializers import (
     CategorySerializer,
-    ProductSerializer
+    ProductSerializer,
+    OrderSerializer
 )
 
 
@@ -63,3 +66,27 @@ class ProductViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN
             )
         return super().destroy(request, *args, **kwargs)
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    """Viewset for managing orders."""
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        """Create a new order."""
+        products_data = serializer.validated_data.pop('products')
+        order = serializer.save(user=self.request.user)
+        for product_data in products_data:
+            product = product_data['product']
+            quantity = product_data['quantity']
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=quantity
+            )
+
+    def get_queryset(self):
+        """Retrieve orders for the current authenticated user."""
+        return Order.objects.filter(user=self.request.user)
