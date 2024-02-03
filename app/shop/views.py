@@ -1,6 +1,7 @@
 """
 View for Shop Api.
 """
+from rest_framework.exceptions import ValidationError
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -75,17 +76,38 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        """Create a new order."""
         products_data = serializer.validated_data.pop('products')
         order = serializer.save(user=self.request.user)
+
         for product_data in products_data:
             product = product_data['product']
+
+            # Check if product is a Product instance
+            # and extract ID if necessary
+            if isinstance(product, Product):
+                product_id = product.id
+            else:
+                product_id = product
+
             quantity = product_data['quantity']
+
+            # Now retrieve the product using the ID
+            product_instance = Product.objects.get(id=product_id)
+
+            if quantity > product_instance.stock:
+                raise ValidationError(
+                    f'Insufficient stock for product ID {product_id}.'
+                )
+
             OrderItem.objects.create(
                 order=order,
-                product=product,
+                product=product_instance,
                 quantity=quantity
             )
+
+            # Update product stock
+            product_instance.stock -= quantity
+            product_instance.save()
 
     def get_queryset(self):
         """Retrieve orders for the current authenticated user."""

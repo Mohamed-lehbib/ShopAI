@@ -102,3 +102,21 @@ class PrivateOrderApiTests(TestCase):
         # Only one order should be retrieved
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['id'], order_user1.id)
+
+    def test_order_exceeding_stock(self):
+        """Test ordering a quantity greater
+        than what's in stock should fail."""
+        category = Category.objects.create(name='Sample Category')
+        product = create_product(user=self.user, category=category)
+        payload = {
+            'products': [
+                {'product': product.id, 'quantity': 20}
+            ]
+        }
+
+        res = self.client.post(ORDERS_URL, data=payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        product.refresh_from_db()
+        self.assertEqual(product.stock, 10)
