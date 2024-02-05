@@ -8,8 +8,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
-# from rest_framework.parsers import MultiPartParser, FormParser
-# from drf_spectacular.utils import extend_schema
+from cloudinary.uploader import upload as cloudinary_upload
 from core.models import (
     Category,
     Product,
@@ -82,21 +81,32 @@ class ProductViewSet(viewsets.ModelViewSet):
             )
         return super().destroy(request, *args, **kwargs)
 
-    # @extend_schema(request={'multipart/form-data': ProductImageSerializer})
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
         """Upload an image to a product."""
         product = self.get_object()
-        serializer = self.get_serializer(
-            product,
-            data=request.data
-        )
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        # Extract the file from the request
+        file = request.FILES.get('image')
+        if not file:
+            return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Upload to Cloudinary
+        try:
+            upload_result = cloudinary_upload(
+                file,
+                folder='product_images',
+                resource_type='image'
+            )
+        except Exception as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Update product image URL
+        product.image = upload_result['url']
+        product.save()
+
+        serializer = self.get_serializer(product)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
