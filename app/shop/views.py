@@ -37,7 +37,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-
 @method_decorator(csrf_exempt, name='dispatch')
 class ProductViewSet(viewsets.ModelViewSet):
     """View for managing products."""
@@ -89,7 +88,8 @@ class ProductViewSet(viewsets.ModelViewSet):
         # Extract the file from the request
         file = request.FILES.get('image')
         if not file:
-            return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'No image provided.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         # Upload to Cloudinary
         try:
@@ -99,7 +99,8 @@ class ProductViewSet(viewsets.ModelViewSet):
                 resource_type='image'
             )
         except Exception as e:
-            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         # Update product image URL
         product.image = upload_result['url']
