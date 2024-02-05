@@ -1,10 +1,15 @@
 """
 View for Shop Api.
 """
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.decorators import action
+# from rest_framework.parsers import MultiPartParser, FormParser
+# from drf_spectacular.utils import extend_schema
 from core.models import (
     Category,
     Product,
@@ -14,6 +19,7 @@ from core.models import (
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
+    ProductImageSerializer,
     OrderSerializer
 )
 
@@ -32,6 +38,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ProductViewSet(viewsets.ModelViewSet):
     """View for managing products."""
     serializer_class = ProductSerializer
@@ -45,6 +52,12 @@ class ProductViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             return Product.objects.filter(user=self.request.user)
         return Product.objects.all()
+
+    def get_serializer_class(self):
+        """Return appropriate serializer class"""
+        if self.action == 'upload_image':
+            return ProductImageSerializer
+        return ProductSerializer
 
     def perform_create(self, serializer):
         """Create a new product."""
@@ -67,6 +80,22 @@ class ProductViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN
             )
         return super().destroy(request, *args, **kwargs)
+
+    # @extend_schema(request={'multipart/form-data': ProductImageSerializer})
+    @action(methods=['POST'], detail=True, url_path='upload-image')
+    def upload_image(self, request, pk=None):
+        """Upload an image to a product."""
+        product = self.get_object()
+        serializer = self.get_serializer(
+            product,
+            data=request.data
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderViewSet(viewsets.ModelViewSet):

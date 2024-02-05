@@ -19,6 +19,8 @@ services:
       - DB_NAME=shopAi
       - DB_USER=root
       - DB_PASS=root
+    # env_file:
+    #   - .env
     depends_on:
       - db
 

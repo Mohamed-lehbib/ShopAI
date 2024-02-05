@@ -25,8 +25,18 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'user', 'category',
-                  'name', 'description', 'price', 'stock']
+                  'name', 'description', 'price', 'stock', 'image']
         read_only_fields = ['id', 'user']
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    """Serializer for uploading images to products."""
+    image = serializers.ImageField(required=True)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'image']
+        read_only_fields = ['id']
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
