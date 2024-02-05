@@ -8,8 +8,8 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
+# from rest_framework.parsers import MultiPartParser, FormParser
+# from drf_spectacular.utils import extend_schema
 from core.models import (
     Category,
     Product,
@@ -38,12 +38,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-@extend_schema_view(
-    upload_image=extend_schema(
-        request={'multipart/form-data': ProductImageSerializer},
-        responses={200: ProductImageSerializer}
-    )
-)
+
 @method_decorator(csrf_exempt, name='dispatch')
 class ProductViewSet(viewsets.ModelViewSet):
     """View for managing products."""
@@ -51,7 +46,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     # permission_classes = [permissions.IsAuthenticated]
     permission_classes = [IsAuthenticatedOrReadOnly]
-    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         """Return products for the current authenticated user
@@ -89,7 +83,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
     # @extend_schema(request={'multipart/form-data': ProductImageSerializer})
-    @action(methods=['POST'], detail=True, url_path='upload-image', parser_classes=[MultiPartParser, FormParser])
+    @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
         """Upload an image to a product."""
         product = self.get_object()
