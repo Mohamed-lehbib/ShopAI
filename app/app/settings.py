@@ -153,6 +153,9 @@ cloudinary.config(
   cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
   api_key = os.environ.get('CLOUDINARY_API_KEY'),
   api_secret = os.environ.get('CLOUDINARY_API_SECRET'),
+#   cloud_name = "dp0fzd3c6",
+#   api_key = "395394523342553",
+#   api_secret = "7B-93ZZo27GLVA6vaQj-_zAJuRA"
 )
 
 # For static and media files
