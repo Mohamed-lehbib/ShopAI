@@ -56,4 +56,5 @@ class AuthTokenSerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
+        attrs['is_superuser'] = user.is_superuser
         return attrs
